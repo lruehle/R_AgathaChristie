@@ -3,6 +3,7 @@
 Making Babysteps in R
 
 CSV Data taken from https://github.com/JamesJackson1/AgathaChristie. Added columns with Publication Date & Detective. 
+Data is mixed. Some Data concernes the entire book and is then the same for all rows of the book, while some Data is specific to the character the row belongs to.
 
 Goal of this project is to create some fun tables & graphs comparing murderers, weapons, occupations etc. throughout the available Agatha Christie books. 
 Maybe a pattern can be found? Maybe Agatha Christie loved making butlers into murderers? Maybe her books became more bloody over the years?
