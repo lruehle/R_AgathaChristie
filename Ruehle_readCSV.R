@@ -1,3 +1,6 @@
+#Repository-link: https://github.com/lruehle/R_AgathaChristie
+
+
 my_table <- read.table(file = "Agatha Christie Data-Table 1.csv", header = TRUE, sep=";",fill=TRUE) #Inhalt
 
 publish_table <- read.table(file= "timeline Agatha Christie_madeByWorkWithData.csv", header = TRUE, sep=";",fill=TRUE) #Diese Tabelle wird noch durch Daten in oberer Tabelle ersetzt
