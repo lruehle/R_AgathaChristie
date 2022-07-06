@@ -29,17 +29,18 @@ mean_murders <- mean(murders)
 
 murder_weapon <- my_table[,c("Poisoned","Stabbed", "Shot","BluntInstrument","Strangulation","Other")]
 colnames_murder_weapon <- colnames(murder_weapon)
+#alternative: names_murder_weapon <- colnames(weapons_per_Book[2:7])
+#as factor: factor_colnames_mw <- as.factor(colnames_murder_weapon)
 weapons_per_Book <- my_table[!duplicated(my_table[,"Book"]),c("Book",colnames_murder_weapon)]
 amount_murder_weapon <- colSums(weapons_per_Book[2:7])
-names_murder_weapon <- colnames(weapons_per_Book[2:7])
 amount_wpb <- colSums(weapons_per_Book[2:7]>0)
 
 #list of murderer Occupation
-amount_occupation <- colSums(my_table[6:23])
-array_occupation <- colnames(my_table[6:23])[max.col(my_table[6:23],ties.method = "first")]
-table_occupation <- table(array_occupation)
+amount_occupation <- colSums(my_table[6:24])
+array_occupation <- colnames(my_table)[max.col(my_table[6:24])+5] # only choose max. of occupation-columns. +5 necessary for correct index
+#old: table_occupation <- table(array_occupation)
 murderer_per_occupation <- table(my_table$Murderer,array_occupation)
-mpo_df <- as.data.frame(murderer_per_occupation)
+#old: mpo_df <- as.data.frame(murderer_per_occupation)
 factor_occ <- as.factor(colnames(my_table[6:23]))
 #murderer_occ <- as.numeric(murderer_per_occupation[2,])
 #no_murderer_occ <- as.numeric(murderer_per_occupation[1,])
