@@ -12,7 +12,7 @@ Maybe a pattern can be found? Maybe Agatha Christie loved making butlers into mu
 Maybe every third book contains a female murderer that strangels at least 5 people, but only if Hercule Poirot investigates? 
 Answers to these highly important questions can soon be found in this R script. Enjoy!
 
-
+Difficulties so far are connected to the dataset not containing all books and containing Data concerning different levels, as described above. Some of these difficulties have been resolved in this script, if it was necessary for the plots. If you use this set/script for your own projects, check out the dataframes before using them.
 
 Created for the Course "Datenanalyse mit R" - Sommersemester 2022, taught by Dr. Jürgen Hermes at the University of Cologne
 
