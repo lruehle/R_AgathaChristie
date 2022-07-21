@@ -16,4 +16,26 @@ Created for the Course "Datenanalyse mit R" - Sommersemester 2022, taught by Dr.
 
 
 
+Cause of death
+![Barplot_Cause_of_Death](https://user-images.githubusercontent.com/35702288/180190418-12ef0ec5-690a-4f8d-81a8-840a11307a0d.png)
 
+Development of killers / killed over publication years
+![killers_per_year](https://user-images.githubusercontent.com/35702288/180229585-e5ff77a9-e2a3-4543-959c-3d7c52192cee.png)
+
+Characters in Occupation being killers or not
+![Barplot_character_Occupation_Nomurder_murder](https://user-images.githubusercontent.com/35702288/180228632-0efaeffe-1574-471a-bcee-16413d9c79a3.png)
+
+same as bubble plot
+![bubble_occupation_murderer](https://user-images.githubusercontent.com/35702288/180229132-c0985a6e-21a2-4da8-a530-10172b5107cc.png)
+
+same as scatter plot
+![Scatter_murderer_in_occupation](https://user-images.githubusercontent.com/35702288/180229231-9a949431-abe5-46d6-95f6-edf2fd01d286.png)
+
+Amount killed by each gender in all books
+![Barplot_killed_victims_per_gender](https://user-images.githubusercontent.com/35702288/180228727-94f7817d-ca4a-420e-9799-65293414f009.png)
+
+Murders and weapon through the years by franchise (some overlap)
+![bubble_murders_franchise_Year](https://user-images.githubusercontent.com/35702288/180229415-946e300d-d3e2-42ed-96fe-c01054bff0ec.png)
+
+publications per year (based on d2nd data set) 
+![Scatter_publicationDate](https://user-images.githubusercontent.com/35702288/180229743-a264de51-7f52-43e4-a3bf-a8e2a53f1254.png)
