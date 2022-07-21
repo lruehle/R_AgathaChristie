@@ -1,19 +1,14 @@
 #Repository-link: https://github.com/lruehle/R_AgathaChristie
-#install.packages("ggplot2")
+#install.packages
 library(ggplot2)
 
-all_Data <- read.table(file = "Agatha Christie Data-Table 1.csv", header = TRUE, sep=";",fill=TRUE) #Inhalt
-
-publish_table <- read.table(file= "timeline Agatha Christie_madeByWorkWithData.csv", header = TRUE, sep=";",fill=TRUE) #Diese Tabelle wird noch durch Daten in oberer Tabelle ersetzt
 
 
-# add new data & reorder
-# reorder needed because: if all occupations are 0, occupation will automatically considered medical as the occupation, instead of none. because of the ties.method=first argument
-# old version: wrong_medical <- which(apply(all_Data[6:23], 1, function(x) sum(x == max(x)) > 1)) 
-#old:wrong_medical_int <- as.integer(apply(all_Data[6:23], 1, function(x) sum(x == max(x)) > 1)) #check in each row, if columns 6-23 (occupations), has more than one maximum. => cases where a row has only "0"s in the occupation columns, because then every column is a maximum
-  #all_zero <- which(rowSums(all_Data[6:23]<1))
-  #all_Data$No_occupation <- all_zero #wrong_medical_int #create new column and fill it with the data
-  #all_Data <- all_Data[,c(1:23,34,24:33)] # reorder 
+all_Data <- read.table(file = "Data/Agatha Christie Data-Table 1.csv", header = TRUE, sep=";",fill=TRUE) #Inhalt
+
+publish_table <- read.table(file= "Data/timeline Agatha Christie_madeByWorkWithData.csv", header = TRUE, sep=";",fill=TRUE) #Tabelle für Vergleich zwischen Datensätzen
+
+# add new data & reorder -> now done in source excel file
 
 
 #Data on book level
@@ -43,7 +38,9 @@ colnames_murder_weapon <- colnames(murder_weapon)
 weapons_per_Book <- all_Data[!duplicated(all_Data[,"Book"]),c("Book",colnames_murder_weapon)]
 amount_murder_weapon <- colSums(weapons_per_Book[2:7])
 amount_wpb <- colSums(weapons_per_Book[2:7]>0)
-
+murders_per_year <- aggregate(book_level_data[,sapply(book_level_data,is.numeric)],book_level_data["PublicationDate"],sum) #filter by publication year & sum all rows with same value
+murders_per_year<- murders_per_year[,c(1,30)]
+murders_per_year <- murders_per_year[-43,] #number 43 is a case with murders but no murderers
 
 
 # get set where each murder is a single line
@@ -59,7 +56,7 @@ blunt_set[, c(25:27, 29:30)][blunt_set[c(25:27, 29:30)]>0] <- 0
 strangulation_set <- murderers[which(murderers$Strangulation>0),]
 strangulation_set[, c(25:28,30)][strangulation_set[c(25:28,30)]>0] <- 0
 other_set <- murderers[which(murderers$Other>0),]
-other_set[, c(25:29)][other_set[c(25:29)]>0] <- 
+other_set[, c(25:29)][other_set[c(25:29)]>0] <- 0
 #combin the sets into one df
 all_murders_sets <- rbind(poisoned_set,stabbed_set,shot_set,blunt_set,strangulation_set,other_set)
 all_murders_subset <- all_murders_sets[, c("Book","Poisoned","Stabbed","Shot","BluntInstrument","Strangulation","Other","NumberofMurders","Detective","PublicationDate")]
@@ -94,7 +91,9 @@ titles_mult_murderers <- murderers[which(duplicated(murderers$Book)),"Book"] #al
 #people stuff  
 # who kills the most etc.
 murderers_per_book =table(murderers$Book)
+#murderers_per_year =table(murderers$PublicationDate)
 murderers_per_year =table(murderers$PublicationDate)
+factor_detective <- as.factor(murderers$Detective)
 gendered_murder<- table(murderers$Gender)
 gendered_murder_amount <- table(murderers$Gender, murderers$NumberofMurders)
 mean_gma <- aggregate(murderers[,"NumberofMurders"], list(murderers$Gender), mean)
@@ -129,24 +128,32 @@ return_occupation <- function(name)
 cod <- barplot(amount_wpb,main="Cause of Death", xlab = "Cause", ylab = "total Amount", ylim=range(pretty(c(0,amount_wpb))),col = c("#CCFFFF"),density = 7,angle = 45,border = "#69b3a2")
 text(cod, amount_wpb+1,paste(amount_wpb), cex=1)
 
+
 #Barplot for killed Victims per Gender
 kvpg <- barplot(gendered_murder_amount, beside=TRUE, main="Amount Killed by men/women", xlab="Number of Victims", ylab="Occurence", col = c("#66CCFF","#33FFFF"), ylim=range(pretty(c(0,max(gendered_murder_amount)))),legend.text = c("women", "men")) #beschriftung fehlt noch
 text(kvpg, gendered_murder_amount+1,paste(gendered_murder_amount), cex=1)
+
 
 #Barplot for no Murderer/murderer per Occupation
 par(mar=c(9,4,4,4)) # adjust margin of graph
 barplot(murderer_per_occupation, main="character Occupation",col = c("#69b3a2","#FF6666"), legend.text = c("no murderer", "murderer"), ylim=range(pretty(c(0,200))), las=2,cex.names = 0.8)
 
-#book / murder Amount work in Progress
-#farben <- c("salmon", "lightblue", "orange")
-#plot(factor(all_titles), murders, pch=16, col=farben[names_murder_weapon])
+
+#murderers and murders per publication year
+mpy = barplot(murderers_per_year,xlab="year", ylab="Amount of murderers", main="combined number of killers & murder per year",col ="#29b4e5" , cex.names=0.9, las=2) #c("#e699ff","#00ccff","#66CCFF","#33FFFF","#f21b3f")[factor_detective]
+points(x=mpy,y=murders_per_year[,2], pch=21, col="#B22222", bg="#f21b3f")
+#legend("topright", legend=(factor_detective[!duplicated(factor_detective)]), lty=1:1, col=factor_detective) # makes no sense, as year based data, not book
+lines(x=mpy,y=murders_per_year[,2], lty=13, lwd=2.5,)
+text(x=32.5,y=5.5,"|",cex=1.1, srt=-35)
+text(33.5, 6, "murders / year")
+
 
 #murderers in occupation / people working in occupation
 plot(x=as.numeric(murderer_per_occupation[1,]), y=as.numeric(murderer_per_occupation[2,]), ylab="killers in occupation", xlab="ppl in occupation", col=factor_occ, cex=1.5) #,col=bookname)
 #text(murderer_per_occupation[1,]+5, (murderer_per_occupation[2,]),labels=colnames(murderer_per_occupation))
 abline(lm(as.numeric(murderer_per_occupation[2,]) ~ as.numeric(murderer_per_occupation[1,])), col = "red")
 legend("right",legend=factor_occ, lty=1:1, col=factor_occ, cex=0.8)
-text(113,12,"best fit") #located with locator(1) & click in graph window
+text(113,11.5,"avrg") #located with locator(1) & click in graph window
 
 #published books per year
 plot(x=publish_table$publication_date, y=publish_table$nb, type="o", lwd=1.5, lty="longdash", ylab="Published Works", xlab="Publication Date") #years & publication wieder aus alter Tabelle ablesen
@@ -199,15 +206,3 @@ ggplot(all_murders_subset, aes(PublicationDate, Detective))+# ,label=Book))+
 #theme(axis.text.x = element_text(size = 8,angle = 45,hjust=1))+
 #labs(title= "Murders in Franchises & Year",x="Publication Date", y="Franchise Name")
 
-
-
-#ideas todo:
-#Kuchendiagramm Murder weapon in Murders (2/3 murders in Book by strangulation etc.)
-#Gender Weapon Preferance
-#Gender Murderer vs Murdered =>no data of murdered
-#character Amount vs. victim amount (likeliness of dying per Book)
-#Berufsgruppen & Murderer
-#Berufsgruppen & Murders
-# mean nchar of names
-# mean amount of murderers per Book
-# gibt es lustige Zufälle, wie alle 3 Jahre ein gutes Buch, oder jedes 5. mehr morder
